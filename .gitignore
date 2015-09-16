@@ -1,0 +1,82 @@
+# /docs/
+/docs/_build/
+/docs/icons.rst.inc
+
+# /pootle/assets/*/
+/pootle/assets/
+
+# /pootle/dbs/
+/pootle/dbs/*.db
+
+# /pootle/locale/*/LC_MESSAGES/
+/pootle/locale/*/LC_MESSAGES/
+
+# /pootle/translations/
+/pootle/translations/*/
+!/pootle/translations/tutorial/
+!/pootle/translations/templates/
+
+# /pootle/settings/
+/pootle/settings/*-local.conf
+
+# TTK checks descriptions template
+/pootle/templates/help/_ttk_quality_checks.html
+
+# General
+*.bak
+*.pyc
+*.pyo
+*.prefs
+*.stats
+*.pending
+*.po.tm
+.translation_index
+.DS_Store
+
+# Django cache
+*.djcache
+
+# npm
+node_modules/
+
+# webpack
+.module-cache
+*.bundle.js
+*.bundle.js.map
+
+# Temporary/local files
+~*
+
+# ViM-generated
+*.swn
+*.swo
+*.swp
+*~
+
+# Emacs-generated
+.#*
+\#*#
+
+# Ignore stuff from the 'gh-pages' branch
+assets/
+_layouts/
+_site/
+
+# Build stuff
+dist/
+build/
+Pootle.egg-info/
+
+# PyDev (Intellij) local configuration folder
+.idea
+
+# local log direcotry
+log/
+
+# Eclipse PyDev projects
+.project
+.pydevproject
+
+# custom manage shell script
+rqworker
+manage

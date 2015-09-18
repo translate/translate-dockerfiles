@@ -32,7 +32,11 @@ RUN apt-get update \
            -k /etc/skel \
            -s /bin/bash \
            -g pootle \
-         pootle \
+         pootle 
+
+ADD data/ /
+
+RUN chown -R pootle:pootle
     && /etc/init.d/redis-server start \
     && sudo -u pootle \
          bash -c "\

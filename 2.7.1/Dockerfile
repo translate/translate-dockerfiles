@@ -11,12 +11,9 @@ RUN apt-get update \
          apt-get install -y \
            build-essential \
            coreutils \
-           git \
            libxml2-dev \
            libxslt-dev \
 	   locales \
-           nodejs \
-           npm \
            python-pip \
            python-dev \
            redis-server \
@@ -28,8 +25,6 @@ RUN apt-get update \
     && locale-gen \
     && update-locale LANG=en_US.UTF-8 \
     && pip install virtualenv \
-    && update-alternatives --install \
-         /usr/bin/node node /usr/bin/nodejs 99 \
     && groupadd -r pootle \
     && useradd \
            -m \
@@ -45,23 +40,10 @@ RUN apt-get update \
            && cd ~/dev/env \
            && virtualenv . \
            && . bin/activate \
-           && pip install \
-                  --upgrade \
-                  -e git://github.com/translate/pootle#egg=pootle \
+	   && pip install /home/pootle/Pootle-2.7.1.tar.bz2 \
            && pootle init \
            && pootle migrate --noinput \
            && pootle initdb \
-           && cd src/pootle/pootle/static/js/ \
-           && npm install \
-           && npm update \
-           && mkdir ~/dev/env/src/pootle/pootle/assets \
-           && pootle webpack \
-           && pootle collectstatic \
-                  --noinput \
-                  --clear \
-                  -i node_modules \
-                  -i *.jsx \
-           && pootle assets build \
            && echo \"from django.contrib.auth import get_user_model; \
                      user = get_user_model().objects.create_superuser('admin', 'admin@example.com', 'admin'); \" \
                 | pootle shell \

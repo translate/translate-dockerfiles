@@ -43,12 +43,14 @@ RUN apt-get update \
          GRANT ALL PRIVILEGES ON pootledb.* \
            TO pootle@localhost \
            IDENTIFIED BY 'CHANGEME'; \
-         FLUSH PRIVILEGES;" 
+         FLUSH PRIVILEGES;" \
+    && /etc/init.d/mysql stop
 
 ADD data/ /
 
 RUN chown -R pootle:pootle /home/pootle \
     && /etc/init.d/redis-server start \
+    && /etc/init.d/mysql start \
     && sudo -u pootle \
          bash -c "\
            mkdir -p ~/dev/env \

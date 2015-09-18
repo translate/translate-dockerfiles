@@ -17,25 +17,14 @@ RUN chown -R pootle:pootle /home/pootle/ \
              -t wheezy-backports \
              -y \
            redis-server \
-           nodejs-legacy \
-	   git \
-           curl \
-    && curl -L --insecure -O https://www.npmjs.org/install.sh \
-    && /bin/bash install.sh \
-    && rm install.sh \
     && /etc/init.d/mysql start \
     && /etc/init.d/redis-server start \
     && sudo -u pootle bash -c " \
          cd ~/dev/env \
 	 && . bin/activate \
-         && pip install \
-                --upgrade \
-                -e git://github.com/phlax/pootle@2.6.1#egg=pootle \
+         && pip install --upgrade \"Pootle>=2.6,<2.7\" \
          && pootle setup \
-         && pip install \
-                --upgrade \
-		--exists-action=w \
-                -e git://github.com/phlax/pootle@calculate_checks#egg=pootle \
+         && pip install --upgrade /home/pootle/Pootle-2.7.1.tar.bz2 \
          && sed -i \
               s/django.db.backends/transaction_hooks.backends/g ~/.pootle/pootle.conf \
 	 && echo \"DATABASES['default']['ATOMIC_REQUESTS'] = True\" >> ~/.pootle/pootle.conf \
@@ -43,17 +32,6 @@ RUN chown -R pootle:pootle /home/pootle/ \
          && pootle migrate accounts 0002 --fake \
          && pootle migrate pootle_translationproject 0002 --fake \
          && pootle migrate \
-         && cd src/pootle/pootle/static/js/ \
-         && npm install \
-         && npm update \
-         && mkdir -p ~/dev/env/src/pootle/pootle/assets \
-         && pootle webpack \
-         && pootle collectstatic \
-                --noinput \
-                --clear \
-                -i node_modules \
-                -i *.jsx \
-         && pootle assets build \
 	 && pootle update_user_email admin admin@example.com \
 	 && pootle verify_user admin \
 	 && pootle calculate_checks --no-rq \

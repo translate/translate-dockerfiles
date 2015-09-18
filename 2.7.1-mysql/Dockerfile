@@ -11,14 +11,11 @@ RUN apt-get update \
          apt-get install -y \
            build-essential \
            coreutils \
-           git \
            libmysqlclient-dev \
            libxml2-dev \
            libxslt-dev \
            locales \
            mysql-server \
-           nodejs \
-           npm \
            python-dev \
            python-pip \
            redis-server \
@@ -29,8 +26,6 @@ RUN apt-get update \
     && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
     && locale-gen \
     && update-locale LANG=en_US.UTF-8 \
-    && update-alternatives --install \
-         /usr/bin/node node /usr/bin/nodejs 99 \
     && pip install virtualenv \
     && groupadd -r pootle \
     && useradd \
@@ -48,7 +43,11 @@ RUN apt-get update \
          GRANT ALL PRIVILEGES ON pootledb.* \
            TO pootle@localhost \
            IDENTIFIED BY 'CHANGEME'; \
-         FLUSH PRIVILEGES;" \
+         FLUSH PRIVILEGES;" 
+
+ADD data/ /
+
+RUN chown -R pootle:pootle \
     && /etc/init.d/redis-server start \
     && sudo -u pootle \
          bash -c "\
@@ -56,27 +55,14 @@ RUN apt-get update \
            && cd ~/dev/env \
            && virtualenv . \
            && . bin/activate \
-           && pip install \
-                  --upgrade \
-                  -e git://github.com/translate/pootle#egg=pootle \
-                MySQL-python \
+           && pip install MySQL-python \
+	   && pip install /home/pootle/Pootle-2.7.1.tar.bz2 \
 	   && pootle init \
 	          --db=mysql \
 	   && echo 'DATABASES[\"default\"][\"PASSWORD\"] = \"CHANGEME\"' \
 	        >> ~/.pootle/pootle.conf \
            && pootle migrate \
            && pootle initdb \
-           && cd src/pootle/pootle/static/js/ \
-           && npm install \
-           && npm update \
-           && mkdir ~/dev/env/src/pootle/pootle/assets \
-           && pootle webpack \
-           && pootle collectstatic \
-                  --noinput \
-                  --clear \
-                  -i node_modules \
-                  -i *.jsx \
-           && pootle assets build \
            && echo \"from django.contrib.auth import get_user_model; \
                      user = get_user_model().objects.create_superuser('admin', 'admin@example.com', 'admin'); \" \
                 | pootle shell \

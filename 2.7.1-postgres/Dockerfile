@@ -66,6 +66,7 @@ RUN chown -R pootle:pootle /home/pootle \
            && echo \"from django.contrib.auth import get_user_model; \
                      user = get_user_model().objects.create_superuser('admin', 'admin@example.com', 'admin'); \" \
                 | pootle shell \
+           && echo 'DEBUG = True' >> ~/.pootle/pootle.conf \
            && sleep 300" \
     && /etc/init.d/postgresql stop \
     && /etc/init.d/redis-server stop

@@ -52,7 +52,7 @@ RUN chown -R pootle:pootle /home/pootle \
                      user = get_user_model().objects.create_superuser('admin', 'admin@example.com', 'admin'); \" \
                 | pootle shell \
 	   && pootle verify_user admin \
-	   && pootle refresh_stats_rq --no-rq \
+	   && pootle refresh_stats --no-rq \
            && echo 'DEBUG = True' >> ~/.pootle/pootle.conf \	   
            && sleep 300" \
     && /etc/init.d/redis-server stop

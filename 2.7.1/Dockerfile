@@ -36,7 +36,7 @@ RUN apt-get update \
 
 ADD data/ /
 
-RUN chown -R pootle:pootle
+RUN chown -R pootle:pootle \
     && /etc/init.d/redis-server start \
     && sudo -u pootle \
          bash -c "\

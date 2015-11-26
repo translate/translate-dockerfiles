@@ -57,6 +57,7 @@ RUN apt-get update \
            && pip install \
                 psycopg2 \
                 $POOTLE_PKG \
+		\"elasticsearch<1.7\" \
            && pootle init \
                   --db=postgresql \
            && pootle migrate \

@@ -57,6 +57,7 @@ RUN apt-get update \
            && pip install \
                 MySQL-python \
                 $POOTLE_PKG \
+		\"elasticsearch<1.7\" \
            && pootle init \
                   --db=mysql \
            && echo 'DATABASES[\"default\"][\"PASSWORD\"] = \"CHANGEME\"' \

@@ -23,7 +23,10 @@ RUN echo "deb http://httpredir.debian.org/debian wheezy-backports main" \
            && . bin/activate \
            && pip install --upgrade \"Pootle>=2.6,<2.7\" \
            && pootle setup \
-           && pip install --upgrade $POOTLE_PKG \
+           && pip install \
+  	          --upgrade \
+		$POOTLE_PKG \
+		\"elasticsearch<1.7\" \
            && rm ~/.pootle/pootle.conf \
            && pootle init --db=mysql \
            && echo 'DATABASES[\"default\"][\"PASSWORD\"] = \"CHANGEME\"' \

@@ -43,7 +43,9 @@ RUN apt-get update \
            && cd $INSTALL_DIR \
            && virtualenv . \
            && . bin/activate \
-           && pip install $POOTLE_PKG \
+           && pip install \
+		$POOTLE_PKG \
+		\"elasticsearch<1.7\" \
            && pootle init \
            && pootle migrate \
            && pootle initdb \
